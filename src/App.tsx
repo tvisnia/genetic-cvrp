@@ -44,7 +44,7 @@ function App() {
   };
 
   const onStart = () => {
-    if (!isRunning && !!+generations && !!+populationSize) {
+    if (!isRunning && !!+generations && !!+populationSize && +populationSize !== 1) {
       setIsRunning(true);
       setTimeout(() => {
         const result = geneticAlgorithm(populationSize, generations);
