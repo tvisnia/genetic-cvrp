@@ -1,5 +1,5 @@
-import { CAPACITY, DEGREE_TO_KILOMETERS_FACTOR, cities } from './Const';
-import { Path, PathInfo, Solution, Population, City } from './../model/model';
+import { CAPACITY, DEGREE_TO_KILOMETERS_FACTOR, cities } from "./Const";
+import { Path, PathInfo, Solution, Population, City } from "./../model/model";
 
 export const isValidPath = (path: Path): boolean =>
   path
@@ -45,7 +45,7 @@ export const getPathDistance = (path: Path): number =>
     let previousCity: City;
     let nextCity: City;
     if (currentIndex === 0) {
-      previousCity = cities[0]; //kraków
+      previousCity = cities[0]; //Kraków
       nextCity = currentCity;
     } else {
       nextCity = currentCity;
@@ -56,33 +56,29 @@ export const getPathDistance = (path: Path): number =>
       : total;
   }, 0);
 
-export const copyCity = (city: City): City => Object.assign({} as City, city);
-export const copyPath = (path: Path): Path =>
-  path.slice().map((city) => copyCity(city));
+export const copyPath = (path: Path): Path => path.slice();
+
 export const copySolution = (sol: Solution): Solution =>
   sol.slice().map((path) => copyPath(path));
+
 export const copyPopulation = (pop: Population): Population =>
   pop.slice().map((sol) => copySolution(sol));
 
 export const getSolutionQuality = (solution: Solution): number =>
   solution.reduce((acc, path) => (acc += getPathDistance(path)), 0);
 
-// export const CompareSolutionsByDistanceAscending = (
-//   prevSolution: Solution,
-//   nextSolution: Solution
-// ) => getSolutionQuality(prevSolution) - getSolutionQuality(nextSolution);
-
-export const printSolution = (sol: Solution) => {
-  console.log(`___________________________`);
-  sol.forEach((path, i) => {
-    console.log(
-      `Path nr ${i}: ${path.map((c) => c.id)}, cost: ${analysePath(path).cost}`
-    );
-  });
-};
+export const CompareSolutionsByDistanceAscending = (
+  prevSolution: Solution,
+  nextSolution: Solution
+) => getSolutionQuality(prevSolution) - getSolutionQuality(nextSolution);
 
 export const getRandomSolutions = (population: Population): Population => {
-  const lastIndex = population.length - 1;
+  //tworzenie populacji tymczasowej - reprodukcja obcinająca
+  const temporaryPopulation = population.slice(
+    0,
+    Math.round(population.length / 2)
+  );
+  const lastIndex = temporaryPopulation.length - 1;
   const freeSolutionIndexes = [...Array(lastIndex + 1)].map(
     (_, index) => index
   );
@@ -91,7 +87,6 @@ export const getRandomSolutions = (population: Population): Population => {
   freeSolutionIndexes.splice(randomSolution1Index, 1);
   const randomSolution2Index = freeSolutionIndexes[getRandomInt(0, lastIndex)];
   freeSolutionIndexes.splice(randomSolution2Index, 1);
-
   const randomSolution1: Solution = [...population[randomSolution1Index]];
   const randomSolution2: Solution = [...population[randomSolution2Index]];
   return [randomSolution1, randomSolution2];

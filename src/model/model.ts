@@ -6,13 +6,17 @@ export interface City {
   name: string;
 }
 
-export interface Car {
-  capacity: number;
-}
-
 export interface PathInfo {
   cost: number;
   isValid: boolean;
+}
+
+export interface AlgorithmResult {
+  bestStartQuality: number;
+  bestEndQuality: number;
+  crossovers: number;
+  mutations: number;
+  bestEndSolution: Solution;
 }
 
 export type Path = City[];

@@ -1,31 +1,30 @@
-import { generateRandomPopulation } from './../commons/solutionGenerator';
-import { SET_PROBABILITY_0_20, cities } from './../commons/Const';
-import { Solution, City, Path, Population } from './../model/model';
+import { generateRandomPopulation } from "./../commons/solutionGenerator";
+import { SET_PROBABILITY_0_20, cities } from "./../commons/Const";
 import {
+  City,
+  Path,
+  Solution,
+  Population,
+  AlgorithmResult,
+} from "./../model/model";
+import {
+  CompareSolutionsByDistanceAscending,
   getSolutionQuality,
-  copyPopulation,
+  getRandomSolutions as getSolutionsForCrossover,
   getRandomInt,
   hasPathCity,
-  getRandomSolutions,
-} from './../commons/helpers';
-
-// const CompareSolutionsByDistanceAscending = (
-//   prevSolution: Solution,
-//   nextSolution: Solution
-// ) => getSolutionQuality(prevSolution) - getSolutionQuality(nextSolution);
+  copyPopulation,
+} from "./../commons/helpers";
 
 export const geneticAlgorithm = (
   basePopulationCount: number,
   generations: number
-) => {
+): AlgorithmResult => {
   const basePopulation: Population = generateRandomPopulation(
     basePopulationCount,
     cities
   );
-  basePopulation.sort(
-    (prevSolution, nextSolution) =>
-      getSolutionQuality(prevSolution) - getSolutionQuality(nextSolution)
-  );
+  basePopulation.sort(CompareSolutionsByDistanceAscending);
 
   let basePopulationCopy: Population = copyPopulation(basePopulation);
 
@@ -33,17 +32,9 @@ export const geneticAlgorithm = (
   let crossovers = 0;
   let mutations = 0;
 
-  console.log(
-    `Start: ${basePopulation.map((s: Solution) => getSolutionQuality(s))}`
-  );
   [...Array(generations)].forEach((_, generationIndex) => {
-    if ((generationIndex + 1) % 10000 === 0)
-      console.log(`Powstałych generacji: ${generationIndex + 1}`);
-    // const bestSolution = basePopulationByQualityAsc[0]
-
-    //przygotowanie do krzyżowania
-    //losowanie dwóch osobników/rozwiązań
-    const [randomSolution1, randomSolution2] = getRandomSolutions(
+    //przygotowanie do krzyżowania -losowanie dwóch osobników/rozwiązań z populacji tymczasowej
+    const [randomSolution1, randomSolution2] = getSolutionsForCrossover(
       basePopulationCopy
     );
     const aCityPathIndexIn1 = 0;
@@ -54,7 +45,7 @@ export const geneticAlgorithm = (
     );
 
     if (~indexCityB) {
-      // 1 warunek krzyżowania spełniony
+      // 1 warunek krzyżowania spełniony - znaleziono miasto o tym samym zapotrzebowaniu na towar
       const cityB = cities[indexCityB];
 
       const bCityPathIndexIn1 = randomSolution1.findIndex((path: Path) =>
@@ -68,14 +59,12 @@ export const geneticAlgorithm = (
       );
 
       // zamiana w pierwszym rozwiązaniu
-
       const bCityIndexInPath1 = randomSolution1[bCityPathIndexIn1].findIndex(
         (city: City) => city.id === cityB.id
       );
-      // zamiana A -> B
-      randomSolution1[aCityPathIndexIn1][aCityIndexInPath1] = cityB;
-      //zamiana B -> A
-      randomSolution1[bCityPathIndexIn1][bCityIndexInPath1] = cityA;
+
+      randomSolution1[aCityPathIndexIn1][aCityIndexInPath1] = cityB; // zamiana A -> B
+      randomSolution1[bCityPathIndexIn1][bCityIndexInPath1] = cityA; //zamiana B -> A
 
       //zamiana w drugim rozwiązaniu
       const bCityIndexInPath2 = randomSolution2[bCityPathIndexIn2].findIndex(
@@ -84,10 +73,9 @@ export const geneticAlgorithm = (
       const aCityIndexInPath2 = randomSolution2[aCityPathIndexIn2].findIndex(
         (city: City) => city.id === cityA.id
       );
-      // zamiana A -> B
-      randomSolution2[aCityPathIndexIn2][aCityIndexInPath2] = cityB;
-      // zamiana B -> A
-      randomSolution2[bCityPathIndexIn2][bCityIndexInPath2] = cityA;
+
+      randomSolution2[aCityPathIndexIn2][aCityIndexInPath2] = cityB; // zamiana A -> B
+      randomSolution2[bCityPathIndexIn2][bCityIndexInPath2] = cityA; // zamiana B -> A
 
       const solution1Quality = getSolutionQuality(randomSolution1);
       const solution2Quality = getSolutionQuality(randomSolution2);
@@ -105,30 +93,13 @@ export const geneticAlgorithm = (
       if (newBestQuality < currentBestQuality) {
         basePopulation.splice(basePopulation.length - 1, 1);
         basePopulation.push(newBestSolution);
-        basePopulation.sort(
-          (prevSolution, nextSolution) =>
-            getSolutionQuality(prevSolution) - getSolutionQuality(nextSolution)
-        );
+        basePopulation.sort(CompareSolutionsByDistanceAscending);
         crossovers++;
-        console.log(
-          `najlepsza jakość dotychczas: ${
-            basePopulation.map((s: Solution) => getSolutionQuality(s))[0]
-          }`
-        );
       }
-      //ocena otrzymanych rozwiązań :
       basePopulationCopy = copyPopulation(basePopulation);
-      // console.log(
-      //     `populacja bazowa po krzyżowaniu i sorcie : ${basePopulation.map((s) =>
-      //         getSolutionQuality(s)
-      //     )}`
-      // );
-    } else {
-      //   console.log(`corresponding city not found, next generation`);
     }
-
+    
     //mutacja
-
     const mutateRandomIndex = getRandomInt(0, SET_PROBABILITY_0_20.length);
     const mutateOn: boolean = SET_PROBABILITY_0_20[mutateRandomIndex] % 2 === 0;
 
@@ -149,40 +120,21 @@ export const geneticAlgorithm = (
       );
       if (randomSolutionInitialQuality > randomSolutionPostMutationQuality) {
         mutations++;
-        // console.log(
-        //   `Mutation did occur and improved solution by ${
-        //     randomSolutionInitialQuality - randomSolutionPostMutationQuality
-        //   } kilometers.`
-        // );
-        if (randomSolutionIndex === 0) {
-          // console.log(
-          //   `mutacja najlepszego : ${basePopulation.map((s: Solution) =>
-          //     getSolutionQuality(s)
-          //   )}`
-          // );
+        if (randomSolutionIndex === 0)
           basePopulation[randomSolutionIndex] = randomSolution;
-        }
       }
       basePopulationCopy = copyPopulation(basePopulation);
-      basePopulation.sort(
-        (prevSolution, nextSolution) =>
-          getSolutionQuality(prevSolution) - getSolutionQuality(nextSolution)
-      );
+      basePopulation.sort(CompareSolutionsByDistanceAscending);
     }
-  }); //koniec petli iteracji/generacji
+  }); //zakres pętli - koniec algorytmu
 
-  // console.log(
-  //   `Qualities after algorithm execution : ${basePopulation.map((s: Solution) =>
-  //     getSolutionQuality(s)
-  //   )}`
-  // );
-  const bestEndQuality = getSolutionQuality(basePopulation[0]);
+  const bestEndSolution = basePopulation[0];
+  const bestEndQuality = getSolutionQuality(bestEndSolution);
   return {
     bestStartQuality,
     bestEndQuality,
     crossovers,
     mutations,
-    solution: basePopulation[0],
+    bestEndSolution,
   };
-  //   analyseSolution(basePopulation[0]);
 };

@@ -1,6 +1,6 @@
-import { CAPACITY } from './Const';
-import { City, Population, Solution } from './../model/model';
-import { getRandomInt, analysePath } from './helpers';
+import { CAPACITY } from "./Const";
+import { getRandomInt, analysePath } from "./helpers";
+import { City, Population, Solution } from "./../model/model";
 
 export const generateRandomPopulation = (
   count: number,
