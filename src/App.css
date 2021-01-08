@@ -107,6 +107,7 @@
 }
 
 .parameters {
+  padding-right: 7px;
   width: 60%;
   flex-direction: column;
 }
@@ -118,7 +119,6 @@
 }
 
 .separator {
-  margin-top: 5px;
   height: 100%;
   width: 1px;
   background-color: white;
