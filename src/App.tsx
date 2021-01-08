@@ -26,8 +26,6 @@ function App() {
   const [bestStartQuality, setBestStartQuality] = useState<number>(0);
   const [bestEndQuality, setBestEndQuality] = useState<number>(0);
 
-  const [bestCurrentQuality, setBestCurrentQuality] = useState<number>(0);
-  const [currentGeneration, setCurrentGeneration] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
   const [startHover, setStartHover] = useState<boolean>(false);
@@ -70,9 +68,7 @@ function App() {
   const onReset = () => {
     if (!isRunning) {
       setBestStartQuality(0);
-      setBestCurrentQuality(0);
       setBestEndQuality(0);
-      setCurrentGeneration(0);
       setCrossovers(0);
       setMutations(0);
       setBestSolution(null);
@@ -163,7 +159,7 @@ function App() {
                     fontFamily: 'courier',
                     color: 'white',
                   }}>
-                  {`Najlepsza jakość po wykonaniu algorytmu :${bestEndQuality}`}
+                  {`Jakość najlepszego rozwiązania ostatniej generacji :${bestEndQuality}`}
                 </div>
               )}
               {!!bestSolution && (
