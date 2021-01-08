@@ -135,7 +135,7 @@ function App() {
                   fontFamily: 'courier',
                   color: 'white',
                 }}>
-                {`Jakość najlepszego rozwiązania populacji P0: ${bestStartQuality}`}
+                {`Jakość najlepszego rozwiązania populacji P0 : ${bestStartQuality}`}
               </div>
               {isRunning && (
                 <div
@@ -159,7 +159,7 @@ function App() {
                     fontFamily: 'courier',
                     color: 'white',
                   }}>
-                  {`Jakość najlepszego rozwiązania ostatniej generacji :${bestEndQuality}`}
+                  {`Jakość najlepszego rozwiązania ostatniej generacji : ${bestEndQuality}`}
                 </div>
               )}
               {!!bestSolution && (
@@ -241,7 +241,7 @@ function App() {
                   fontFamily: 'courier',
                   color: 'white',
                 }}>
-                {`Udanych krzyżowań: ${crossovers}`}
+                {`Udanych krzyżowań : ${crossovers}`}
               </div>
               <div
                 style={{
@@ -250,7 +250,7 @@ function App() {
                   fontFamily: 'courier',
                   color: 'white',
                 }}>
-                {`Udanych mutacji: ${mutations}`}
+                {`Udanych mutacji : ${mutations}`}
               </div>
             </div>
           </div>
