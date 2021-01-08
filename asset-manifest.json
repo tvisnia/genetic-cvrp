@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/genetic-cvrp/static/css/main.e3795f34.chunk.css",
+    "main.css": "/genetic-cvrp/static/css/main.8b03e385.chunk.css",
     "main.js": "/genetic-cvrp/static/js/main.4fb39658.chunk.js",
     "main.js.map": "/genetic-cvrp/static/js/main.4fb39658.chunk.js.map",
     "runtime-main.js": "/genetic-cvrp/static/js/runtime-main.3ede101d.js",
@@ -8,14 +8,14 @@
     "static/js/2.99c21401.chunk.js": "/genetic-cvrp/static/js/2.99c21401.chunk.js",
     "static/js/2.99c21401.chunk.js.map": "/genetic-cvrp/static/js/2.99c21401.chunk.js.map",
     "index.html": "/genetic-cvrp/index.html",
-    "static/css/main.e3795f34.chunk.css.map": "/genetic-cvrp/static/css/main.e3795f34.chunk.css.map",
+    "static/css/main.8b03e385.chunk.css.map": "/genetic-cvrp/static/css/main.8b03e385.chunk.css.map",
     "static/js/2.99c21401.chunk.js.LICENSE.txt": "/genetic-cvrp/static/js/2.99c21401.chunk.js.LICENSE.txt",
     "static/media/App.css": "/genetic-cvrp/static/media/background.607b3c6d.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.3ede101d.js",
     "static/js/2.99c21401.chunk.js",
-    "static/css/main.e3795f34.chunk.css",
+    "static/css/main.8b03e385.chunk.css",
     "static/js/main.4fb39658.chunk.js"
   ]
 }
