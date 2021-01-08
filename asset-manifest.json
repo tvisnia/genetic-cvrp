@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/genetic-cvrp/static/css/main.e3795f34.chunk.css",
-    "main.js": "/genetic-cvrp/static/js/main.753d9765.chunk.js",
-    "main.js.map": "/genetic-cvrp/static/js/main.753d9765.chunk.js.map",
+    "main.js": "/genetic-cvrp/static/js/main.26b2fa76.chunk.js",
+    "main.js.map": "/genetic-cvrp/static/js/main.26b2fa76.chunk.js.map",
     "runtime-main.js": "/genetic-cvrp/static/js/runtime-main.3ede101d.js",
     "runtime-main.js.map": "/genetic-cvrp/static/js/runtime-main.3ede101d.js.map",
     "static/js/2.99c21401.chunk.js": "/genetic-cvrp/static/js/2.99c21401.chunk.js",
@@ -16,6 +16,6 @@
     "static/js/runtime-main.3ede101d.js",
     "static/js/2.99c21401.chunk.js",
     "static/css/main.e3795f34.chunk.css",
-    "static/js/main.753d9765.chunk.js"
+    "static/js/main.26b2fa76.chunk.js"
   ]
 }
