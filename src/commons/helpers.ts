@@ -1,5 +1,5 @@
-import { CAPACITY, DEGREE_TO_KILOMETERS_FACTOR, cities } from "./Const";
-import { Path, PathInfo, Solution, Population, City } from "./../model/model";
+import { CAPACITY, cities } from './Const';
+import { Path, PathInfo, Solution, Population, City } from './../model/model';
 
 export const isValidPath = (path: Path): boolean =>
   path
@@ -20,10 +20,8 @@ export const analysePath = (path: Path): PathInfo => {
 export const analyseSolution = (solution: Solution) => {
   const citiesIds: number[] = [];
   solution.forEach((path) => path.forEach((city) => citiesIds.push(city.id)));
-  solution.forEach((path) => console.log(analysePath(path).isValid));
-  citiesIds.sort();
-  console.log(citiesIds);
-  console.log(`equal : ${new Set(citiesIds).size === citiesIds.length}`);
+  const valid = !solution.some((path) => !!!analysePath(path).isValid);
+  console.log(`miast : ${citiesIds.length}, każde auto maks. 1000 : ${valid}`);
 };
 
 export const getRandomInt = (min: number, maxExclusive: number) => {
@@ -32,29 +30,43 @@ export const getRandomInt = (min: number, maxExclusive: number) => {
   return Math.floor(Math.random() * (maxExclusive - min)) + min;
 };
 
-export const getCitiesDistance = (city1: City, city2: City): number =>
-  Math.round(
-    Math.sqrt(
-      Math.pow(city1.longitude - city2.longitude, 2) +
-        Math.pow(city1.latitude - city2.latitude, 2)
-    ) * DEGREE_TO_KILOMETERS_FACTOR
-  );
+export const getCitiesDistance = (city1: City, city2: City): number => {
+  const toRad = (x: number) => {
+    return (x * Math.PI) / 180;
+  };
+  const longitude1 = city1.longitude;
+  const latitude1 = city1.latitude;
+  const longitude2 = city2.longitude;
+  const latitude2 = city2.latitude;
 
-export const getPathDistance = (path: Path): number =>
-  path.reduce((total, currentCity, currentIndex) => {
-    let previousCity: City;
-    let nextCity: City;
-    if (currentIndex === 0) {
-      previousCity = cities[0]; //Kraków
-      nextCity = currentCity;
-    } else {
-      nextCity = currentCity;
-      previousCity = path[currentIndex - 1];
-    }
-    return !!nextCity && !!previousCity
-      ? total + getCitiesDistance(previousCity, nextCity)
-      : total;
-  }, 0);
+  const averageRadius = 6371;
+
+  var x1 = latitude2 - latitude1;
+  var dLat = toRad(x1);
+  var x2 = longitude2 - longitude1;
+  var dLon = toRad(x2);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(latitude1)) *
+      Math.cos(toRad(latitude2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var distance = averageRadius * c;
+  return distance;
+};
+
+export const getPathDistance = (path: Path): number => {
+  let total: number = 0;
+  const fromDepot = getCitiesDistance(cities[0], path[0]);
+  const toDepot = getCitiesDistance(cities[0], path[path.length - 1]);
+
+  path.forEach((city, index) => {
+    if (index !== path.length - 1)
+      total += getCitiesDistance(city, path[index + 1]);
+  });
+  return total + fromDepot + toDepot;
+};
 
 export const copyPath = (path: Path): Path => path.slice();
 

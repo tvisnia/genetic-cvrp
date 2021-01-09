@@ -1,12 +1,12 @@
-import { generateRandomPopulation } from "./../commons/solutionGenerator";
-import { SET_PROBABILITY_0_20, cities } from "./../commons/Const";
+import { generateRandomPopulation } from './../commons/solutionGenerator';
+import { SET_PROBABILITY_0_20, cities } from './../commons/Const';
 import {
   City,
   Path,
   Solution,
   Population,
   AlgorithmResult,
-} from "./../model/model";
+} from './../model/model';
 import {
   CompareSolutionsByDistanceAscending,
   getSolutionQuality,
@@ -14,7 +14,7 @@ import {
   getRandomInt,
   hasPathCity,
   copyPopulation,
-} from "./../commons/helpers";
+} from './../commons/helpers';
 
 export const geneticAlgorithm = (
   basePopulationCount: number,
@@ -98,7 +98,7 @@ export const geneticAlgorithm = (
       }
       basePopulationCopy = copyPopulation(basePopulation);
     }
-    
+
     //mutacja
     const mutateRandomIndex = getRandomInt(0, SET_PROBABILITY_0_20.length);
     const mutateOn: boolean = SET_PROBABILITY_0_20[mutateRandomIndex] % 2 === 0;
@@ -109,22 +109,25 @@ export const geneticAlgorithm = (
       const randomSolutionInitialQuality = getSolutionQuality(randomSolution);
       const randomPathIndex = getRandomInt(0, randomSolution.length);
       const randomPath = randomSolution[randomPathIndex];
-      const randomCityIndex1 = getRandomInt(0, randomPath.length);
-      const randomCityIndex2 = Math.abs(randomCityIndex1 - 1);
-      const cityA = randomPath[randomCityIndex1];
-      const cityB = randomPath[randomCityIndex2];
-      randomPath[randomCityIndex1] = cityB;
-      randomPath[randomCityIndex2] = cityA;
-      const randomSolutionPostMutationQuality = getSolutionQuality(
-        randomSolution
-      );
-      if (randomSolutionInitialQuality > randomSolutionPostMutationQuality) {
-        mutations++;
-        if (randomSolutionIndex === 0)
-          basePopulation[randomSolutionIndex] = randomSolution;
+      //jeśli ścieżka zawiera tylko jedno miasto
+      if (randomPath.length !== 1) {
+        const randomCityIndex1 = getRandomInt(0, randomPath.length);
+        const randomCityIndex2 = Math.abs(randomCityIndex1 - 1);
+        const cityA = randomPath[randomCityIndex1];
+        const cityB = randomPath[randomCityIndex2];
+        randomPath[randomCityIndex1] = cityB;
+        randomPath[randomCityIndex2] = cityA;
+        const randomSolutionPostMutationQuality = getSolutionQuality(
+          randomSolution
+        );
+        if (randomSolutionInitialQuality > randomSolutionPostMutationQuality) {
+          mutations++;
+          if (randomSolutionIndex === 0)
+            basePopulation[randomSolutionIndex] = randomSolution;
+        }
+        basePopulationCopy = copyPopulation(basePopulation);
+        basePopulation.sort(CompareSolutionsByDistanceAscending);
       }
-      basePopulationCopy = copyPopulation(basePopulation);
-      basePopulation.sort(CompareSolutionsByDistanceAscending);
     }
   }); //zakres pętli - koniec algorytmu
 

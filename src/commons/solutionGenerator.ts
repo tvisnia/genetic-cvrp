@@ -1,6 +1,6 @@
-import { CAPACITY } from "./Const";
-import { getRandomInt, analysePath } from "./helpers";
-import { City, Population, Solution } from "./../model/model";
+import { CAPACITY } from './Const';
+import { getRandomInt, analysePath } from './helpers';
+import { City, Population, Solution } from './../model/model';
 
 export const generateRandomPopulation = (
   count: number,
@@ -17,9 +17,10 @@ export const generateRandomSolution = (cities: City[]): Solution => {
     citiesCopy.splice(randomCityId, 1);
   });
 
-  while (citiesCopy.length > 1) {
+  do {
     const randomCityIndex = getRandomInt(1, citiesCopy.length);
     const randomCityDemand = citiesCopy[randomCityIndex].demand;
+    if (!randomCityDemand) console.log(randomCityDemand, randomCityIndex);
     const freeCarIndex = solution.findIndex(
       (path) => analysePath(path).cost + randomCityDemand <= CAPACITY
     );
@@ -27,6 +28,6 @@ export const generateRandomSolution = (cities: City[]): Solution => {
       solution[freeCarIndex].push(citiesCopy[randomCityIndex]);
       citiesCopy.splice(randomCityIndex, 1);
     }
-  }
+  } while (citiesCopy.length > 1);
   return solution;
 };

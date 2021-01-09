@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import { geneticAlgorithm } from "./algorithm/algorithm";
-import { analysePath } from "./commons/helpers";
-import "./App.css";
-import { Solution } from "./model/model";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import { geneticAlgorithm } from './algorithm/algorithm';
+import { analysePath, analyseSolution } from './commons/helpers';
+import './App.css';
+import { Solution } from './model/model';
 
 function App() {
   const classes = useStyles();
@@ -57,6 +57,7 @@ function App() {
         setMutations(mutations);
         setCrossovers(crossovers);
         setBestSolution(bestEndSolution);
+        analyseSolution(bestEndSolution);
       }, 100);
     }
   };
@@ -80,50 +81,54 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <div className="container">
+    <div className='App'>
+      <div className='container'>
         <h2>Zastosowanie algorytmu genetycznego do rozwiązania CVRP</h2>
-        <form className={classes.root} noValidate autoComplete="off">
+        <form className={classes.root} noValidate autoComplete='off'>
           <TextField
             defaultValue={populationSize}
             onChange={onPopulationSizeChange}
-            id="filled-basic"
-            label="Rozmiar populacji"
-            variant="filled"
+            id='filled-basic'
+            label='Rozmiar populacji'
+            variant='filled'
           />
           <TextField
             defaultValue={generations}
             onChange={onGenerationsNumberChange}
-            id="filled-basic"
-            label="Ilość generacji"
-            variant="filled"
+            id='filled-basic'
+            label='Ilość generacji'
+            variant='filled'
           />
         </form>
-        <div className="buttons">
+        <div className='buttons'>
           <div
             onClick={onStart}
-            id={startHover && !isRunning ? "shadow" : undefined}
+            id={startHover && !isRunning ? 'shadow' : undefined}
             onMouseEnter={toggleStartHover}
             onMouseLeave={toggleStartHover}
-            className={isRunning ? "startButtonDisabled" : "startButtonEnabled"}
-          >
+            className={
+              isRunning ? 'startButtonDisabled' : 'startButtonEnabled'
+            }>
             Start
           </div>
           <div
             onClick={onReset}
-            id={resetHover && !isRunning ? "shadow" : undefined}
+            id={resetHover && !isRunning ? 'shadow' : undefined}
             onMouseEnter={toggleResetHover}
             onMouseLeave={toggleResetHover}
-            className={isRunning ? "resetButtonDisabled" : "resetButtonEnabled"}
-          >
+            className={
+              isRunning ? 'resetButtonDisabled' : 'resetButtonEnabled'
+            }>
             Reset
           </div>
         </div>
         {(isRunning || !!bestEndQuality) && (
-          <div className={"results"}>
-            <div className={"parameters"}>
+          <div className={'results'}>
+            <div className={'parameters'}>
               <div style={styles.textStyle}>
-                {`Jakość najlepszego rozwiązania populacji P0 : ${bestStartQuality}`}
+                {`Jakość najlepszego rozwiązania populacji P0 : ${Math.round(
+                  bestStartQuality
+                )}`}
               </div>
               {isRunning && <div style={styles.withMargin}>...</div>}
               {!!bestEndQuality && (
@@ -133,11 +138,12 @@ function App() {
 
                     fontSize: 11,
                     fontWeight: 500,
-                    fontFamily: "Courier New",
-                    color: "white",
-                  }}
-                >
-                  {`Jakość najlepszego rozwiązania po egzekucji algorytmu : ${bestEndQuality}`}
+                    fontFamily: 'Courier New',
+                    color: 'white',
+                  }}>
+                  {`Jakość najlepszego rozwiązania po egzekucji algorytmu : ${Math.round(
+                    bestEndQuality
+                  )}`}
                 </div>
               )}
               {!!bestSolution && (
@@ -173,8 +179,8 @@ function App() {
                 </>
               )}
             </div>
-            <div className={"separator"} />
-            <div className={"generations"}>
+            <div className={'separator'} />
+            <div className={'generations'}>
               <div style={styles.textStyle}>
                 {`Udanych krzyżowań : ${crossovers}`}
               </div>
@@ -193,23 +199,23 @@ const styles = {
   textStyle: {
     fontSize: 11,
     fontWeight: 500,
-    fontFamily: "Courier New",
-    color: "white",
+    fontFamily: 'Courier New',
+    color: 'white',
   },
   withMargin: {
     marginTop: 10,
     fontSize: 11,
     fontWeight: 500,
-    fontFamily: "Courier New",
-    color: "white",
+    fontFamily: 'Courier New',
+    color: 'white',
   },
 };
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& > *": {
+    '& > *': {
       margin: theme.spacing(1),
-      width: "25ch",
+      width: '25ch',
     },
   },
 }));
