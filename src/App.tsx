@@ -39,7 +39,10 @@ function App() {
       !isRunning &&
       !!+generations &&
       !!+populationSize &&
-      +populationSize !== 1
+      +populationSize > 2 &&
+      +generations > 0 &&
+      Number.isInteger(populationSize) &&
+      Number.isInteger(generations)
     ) {
       setIsRunning(true);
       setTimeout(() => {
@@ -59,7 +62,7 @@ function App() {
         setBestSolution(bestEndSolution);
         analyseSolution(bestEndSolution);
       }, 100);
-    }
+    } else alert('Nieprawidłowe parametry wejściowe');
   };
 
   const onReset = () => {
